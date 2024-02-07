@@ -166,7 +166,7 @@ while True:
     match choice:
         case 1:
             name = input("Имя пользователя: ")
-            birthday = input("Дата рождения сотрудника (ДД/ММ/ГГГГ): ")
+            birthday = input("Дата рождения пользователя (ДД/ММ/ГГГГ): ")
             state = True
             while state:
                 parts = birthday.split("/")
