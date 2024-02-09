@@ -4,7 +4,7 @@ from psycopg2 import sql
 connection = psycopg2.connect(
     dbname='finance',
     user='postgres',
-    password='YOUR_PASSWORD',
+    password='14092004NikZuk',
     host='localhost',
     port='5432'
 )
@@ -81,7 +81,8 @@ class User:
            FROM wallet
            INNER JOIN users ON wallet.user_id = users.id
            INNER JOIN categories ON wallet.category_id = categories.id
-           INNER JOIN money ON wallet.money_id = money.id;""")
+           INNER JOIN money ON wallet.money_id = money.id
+           where users.name = %s ;""")
         self.cursor.execute(query, (name, ))
         data = self.cursor.fetchall()
         return data
@@ -146,7 +147,7 @@ def check_user_exists(user_name):
 db = User(
     dbname='finance',
     user='postgres',
-    password='YOUR_PASSWORD',
+    password='14092004NikZuk',
     host='localhost',
     port='5432'
 )
