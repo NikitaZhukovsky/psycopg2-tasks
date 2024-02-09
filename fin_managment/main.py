@@ -51,7 +51,6 @@ for query in tables_queries:
     cursor.execute(query)
     connection.commit()
 
-
 class User:
     def __init__(self, dbname, user, password, host, port):
         self.connection = psycopg2.connect(dbname=dbname, user=user, password=password,
@@ -75,31 +74,31 @@ class User:
 
     def get_info_by_name(self, name):
         query = sql.SQL("""
-       SELECT users.name AS user_name,
-       categories.name AS category_name,
-       money.value AS money_value,
-       money.trans_date AS money_trans_date
-       FROM wallet
-       INNER JOIN users ON wallet.user_id = users.id
-       INNER JOIN categories ON wallet.category_id = categories.id
-       INNER JOIN money ON wallet.money_id = money.id;""")
+           SELECT users.name AS user_name,
+           categories.name AS category_name,
+           money.value AS money_value,
+           money.trans_date AS money_trans_date
+           FROM wallet
+           INNER JOIN users ON wallet.user_id = users.id
+           INNER JOIN categories ON wallet.category_id = categories.id
+           INNER JOIN money ON wallet.money_id = money.id;""")
         self.cursor.execute(query, (name, ))
         data = self.cursor.fetchall()
         return data
 
     def get_info_by_categories(self, name, categories):
         query = sql.SQL("""
-       SELECT users.name, categories.name AS category_name,
-       money.value AS money_value,
-       money.trans_date AS money_trans_date
-       FROM wallet
-       INNER JOIN users ON wallet.user_id = users.id
-       INNER JOIN categories ON wallet.category_id = categories.id
-       INNER JOIN money ON wallet.money_id = money.id
-       WHERE users.name = %s AND categories.name = %s;""")
+            SELECT users.name, categories.name AS category_name,
+            money.value AS money_value,
+            money.trans_date AS money_trans_date
+            FROM wallet
+            INNER JOIN users ON wallet.user_id = users.id
+            INNER JOIN categories ON wallet.category_id = categories.id
+            INNER JOIN money ON wallet.money_id = money.id
+            WHERE users.name = %s AND categories.name = %s;""")
         self.cursor.execute(query, (name, categories))
-        user = self.cursor.fetchall()
-        return user
+        info_category = self.cursor.fetchall()
+        return info_category
 
     def summ_money(self, date, name):
         query = sql.SQL("""
@@ -108,8 +107,8 @@ class User:
                inner join users on users.id = wallet.user_id 
                where trans_date < %s AND users.name = %s;""")
         self.cursor.execute(query, (date, name))
-        user = self.cursor.fetchall()
-        return user
+        money = self.cursor.fetchall()
+        return money
 
     def close(self):
         self.cursor.close()
@@ -120,7 +119,6 @@ categories = ['Продукты', 'Транспорт', 'Жилье', 'Здор�
 
 
 def choose_expense_category():
-
     print("Выберите категорию расходов:")
     for i, category in enumerate(categories, start=1):
         print(f"{i}. {category}")
@@ -271,9 +269,9 @@ while True:
 
             print(f"Cумма равна: {sum_value_numeric}")
         case 6:
+            db.close()
             break
         case _:
             print("Некорректный выбор. Пожалуйста, выберите действие от 1 до 4.")
 
 
-db.close()
